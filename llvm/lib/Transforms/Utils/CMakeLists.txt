@@ -1,4 +1,6 @@
 add_llvm_component_library(LLVMTransformUtils
+  LetMeIn.cpp
+  GoodbyeWorld.cpp
   AddDiscriminators.cpp
   AMDGPUEmitPrintf.cpp
   ASanStackFrameLayout.cpp

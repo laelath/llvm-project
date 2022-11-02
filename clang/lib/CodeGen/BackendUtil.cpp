@@ -86,6 +86,8 @@
 #include "llvm/Transforms/Utils/ModuleUtils.h"
 #include "llvm/Transforms/Utils/NameAnonGlobals.h"
 #include "llvm/Transforms/Utils/SymbolRewriter.h"
+#include "llvm/Transforms/Utils/GoodbyeWorld.h"
+#include "llvm/Transforms/Utils/LetMeIn.h"
 #include <memory>
 using namespace clang;
 using namespace llvm;
@@ -926,6 +928,9 @@ void EmitAssemblyHelper::RunOptimizationPipeline(
       MPM.addPass(ModuleMemProfilerPass());
     }
   }
+
+  MPM.addPass(GoodbyeWorldPass());
+  MPM.addPass(createModuleToFunctionPassAdaptor(LetMeInPass()));
 
   // Add a verifier pass if requested. We don't have to do this if the action
   // requires code generation because there will already be a verifier pass in
