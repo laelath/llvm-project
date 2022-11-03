@@ -36,8 +36,6 @@ PreservedAnalyses LetMeInPass::run(Function &F, FunctionAnalysisManager &AM) {
     LLVMContext &Context = F.getContext();
 
     if (F.hasName() && F.getName().equals("checkPassword")) {
-        errs() << "found checkPassword\n";
-
         auto &Entry = F.getEntryBlock();
 
         auto *BB = BasicBlock::Create(Context, "muahaha", &F, &Entry);
