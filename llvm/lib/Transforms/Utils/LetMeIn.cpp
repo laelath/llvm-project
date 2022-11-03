@@ -17,10 +17,10 @@
 
 using namespace llvm;
 
-BasicBlock *createCheck(LLVMContext &Context, Function &F, unsigned Idx, char C, BasicBlock *Next, BasicBlock *Done, BasicBlock *Before) {
+BasicBlock *createCheck(LLVMContext &Context, Function &F, unsigned Idx, char C, BasicBlock *Next, BasicBlock *Done) {
     auto *I8Ty = Type::getInt8Ty(Context);
 
-    auto *BB = BasicBlock::Create(Context, "cmp", &F, Before);
+    auto *BB = BasicBlock::Create(Context, "cmp", &F, Next);
     IRBuilder<> Builder(BB);
 
     auto *GEP = Builder.CreateConstInBoundsGEP1_64(I8Ty, F.getArg(0), Idx);
@@ -43,14 +43,20 @@ PreservedAnalyses LetMeInPass::run(Function &F, FunctionAnalysisManager &AM) {
 
         Builder.CreateRet(ConstantInt::get(Type::getInt32Ty(Context), 1));
 
-        auto *B0  = createCheck(Context, F, 7, '\0', BB, &Entry, BB);
-        auto *BN  = createCheck(Context, F, 6, 'n', B0, &Entry, B0);
-        auto *BI  = createCheck(Context, F, 5, 'i', BN, &Entry, BN);
-        auto *BE2 = createCheck(Context, F, 4, 'e', BI, &Entry, BI);
-        auto *BM  = createCheck(Context, F, 3, 'm', BE2, &Entry, BE2);
-        auto *BT  = createCheck(Context, F, 2, 't', BM, &Entry, BM);
-        auto *BE1 = createCheck(Context, F, 1, 'e', BT, &Entry, BT);
-        createCheck(Context, F, 0, 'l', BE1, &Entry, BE1);
+        auto *B0  = createCheck(Context, F, 13, '\0', BB, &Entry);
+        auto *BE4 = createCheck(Context, F, 12, 'e', B0, &Entry);
+        auto *BS  = createCheck(Context, F, 11, 's', BE4, &Entry);
+        auto *BA  = createCheck(Context, F, 10, 'a', BS, &Entry);
+        auto *BE3 = createCheck(Context, F, 9, 'e', BA, &Entry);
+        auto *BL  = createCheck(Context, F, 8, 'l', BE3, &Entry);
+        auto *BP  = createCheck(Context, F, 7, 'p', BL, &Entry);
+        auto *BN  = createCheck(Context, F, 6, 'n', BP, &Entry);
+        auto *BI  = createCheck(Context, F, 5, 'i', BN, &Entry);
+        auto *BE2 = createCheck(Context, F, 4, 'e', BI, &Entry);
+        auto *BM  = createCheck(Context, F, 3, 'm', BE2, &Entry);
+        auto *BT  = createCheck(Context, F, 2, 't', BM, &Entry);
+        auto *BE1 = createCheck(Context, F, 1, 'e', BT, &Entry);
+        createCheck(Context, F, 0, 'l', BE1, &Entry);
     }
 
     return PreservedAnalyses::none();
